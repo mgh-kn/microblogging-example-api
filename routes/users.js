@@ -1,5 +1,6 @@
 var express  = require('express');
 var router   = express.Router();
+
 var mongoose = require('mongoose');
 var User     = require('../models/User.js');
 var db       = mongoose.connection;
@@ -87,15 +88,12 @@ router.get('/:id', function(req, res)
         // }
 });
 
-router.post('/', function(req, res)
+router.post('/', function(req, res, next)
 {
-    User.create(req.body, function(err, res, next)
+    User.create(req.body, function(err, userinfo)
     {
-        User.create(req.body, function(err, userinfo)
-        {
-            if(err) res.status(500).send(err);
-            else res.sendStatus(200);
-        });
+        if(err) res.status(500).send(err);
+        else res.sendStatus(200);
     });
 
     // var new_user = req.body;
@@ -128,7 +126,7 @@ router.delete('/:id', function(req, res)
     // res.status(200).send('Usuario con id ' + req.params.id + 'ha sido borrado satisfactoriamente');
 });
 
-route.post('/signin', function(req, res, next)
+router.post('/signin', function(req, res, next)
 {
     User.findOne({ username: req.body.username }, function(err, user)
     {
@@ -136,7 +134,7 @@ route.post('/signin', function(req, res, next)
         // Si el usuario existe
         if(user != null)
         {
-            user.comparePassword(re.body.password, function(err, isMatch)
+            user.comparePassword(req.body.password, function(err, isMatch)
             {
                 if(err) return next(err);
 

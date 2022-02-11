@@ -1,23 +1,22 @@
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
-var Post = require('../models/Post.js');
+var Post   = require('../models/Post.js');
 
-// PAra la encriptación del password
+// Para la encriptación del password
 var bcrypt = require('bcryptjs');
 
 var SALT_WORK_FACTOR = 10;
 
 var UserSchema = new Schema(
-    {
-        username: { type: String, required: true, index: { unique: true },
-        password: { type: String, required: true },
-        fullname: String,
-        email: { type: String, required: true },
-        creationdate: { type: Date, default: Date.now },
-        role: { type: String, enum: [ 'admin', 'subscriber' ], default: 'subscriber' },
-        posts: [{ type: Schema.ObjectId, ref: 'Post', default: null }]
-     }
+{
+    username     : { type: String, required: true, index: { unique: true }},
+    password     : { type: String, required: true },
+    fullname     : String,
+    email        : { type: String, required: true },
+    creationdate : { type: Date, default: Date.now },
+    role         : { type: String, enum: [ 'admin', 'subscriber' ], default: 'subscriber' },
+    posts        : [{ type: Schema.ObjectId, ref: 'Post', default: null }]
  });
 
  UserSchema.pre('save', function(next)
